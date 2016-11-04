@@ -1,1 +1,49 @@
-Avanze Rosende
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Nov  3 23:08:16 2016
+
+@author: Rosende
+"""
+
+import gurobypy as gpy
+#indices
+#tengo 3 periodos (t)
+tiempo = 3 
+#tengo 2 tipos de proyecto (Suelo o Techo) 
+proyecto = 2
+#tengo 4 tipos de estructura (j)
+tipo_estructura = 4
+#tengo 3 proveedores de paneles (m)
+proveedores = 3
+#tengo 5 potencias de inversores distintas 
+potencia_inversores = 5 
+#tengo 2 posibilidades de compra (Local o Fuera)
+compra = 2
+#tengo 9 posibles destinos de proyecto (n)
+lugares = 9
+
+
+model = gpy.Model('distribucion_economica')
+
+#Costo del panel comprado al proveedor m 
+CP = [330,330,422]
+#Costo de la estructura tipo j comprada para el proyecto tipo b en la 
+# posibilidad de compra m
+CE = [83, 83, 60, 83, 75, 71]
+#Costo del transporte nacional que depende del lugar (n) del proyecto
+CTN = [230, 736, 701.5, 722.2]
+#Costo fijo de transporte internacional 
+CTI = [2215.5]
+#Costo fijo de almacenaje 
+CA = [140]
+#DEMANDA DEL PERIODO [KW]
+DP = [100, 200 ,200]
+#DURACION DEL PERIODO DE TIEMPO EN MESES
+D = [1, 1, 1]
+
+
+yp = {}
+for m in range(0,proveedores):
+    for t in range(0,tiempo):
+#        y[i,t] = model.addVar(vtype=gpy.GRB.CONTINUOUS, lb=0.0, obj=CM[i]*H[t])
+        yp[m,t] = model.addVar(vtype=gpy.GRB.CONTINUOUS,lb=0.0, obj=CP[m]*D[t])
